@@ -55,21 +55,21 @@ public class MainActivity extends AppCompatActivity {
         };
 
         showRatesText=()-> {
-            ((TextView)findViewById(R.id.textView)).setText(ratesText);
+            tv.setText(ratesText);
         };
 
         showJson=()->{
 
-            String txt = "";
+            StringBuilder txt = new StringBuilder();
 
             try {
                 JSONArray rates = new JSONArray(ratesText);
 
                 for(int i=0;i<rates.length();++i){
                     JSONObject rate = rates.getJSONObject(i);
-                    txt+=rate.getString("txt")+" "+rate.getDouble("rate")+"\n";
+                    txt.append(rate.getString("txt")).append(" ").append(rate.getDouble("rate")).append("\n");
                 }
-                tv.setText(txt);
+                tv.setText(txt.toString());
             } catch (JSONException e) {
                 tv.setText(e.getMessage());
             }
