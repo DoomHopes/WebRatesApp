@@ -1,7 +1,9 @@
 package com.doomhopes.webapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private String ratesText;
     private Runnable showRatesText;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 int sym;
                 while((sym=resource.read())!=-1)
                     response +=(char)sym;
-                ratesText=response;
+                ratesText = new String(response.getBytes(StandardCharsets.ISO_8859_1,"UTF-8"));
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
