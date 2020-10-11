@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -21,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private Runnable loadRates;
     private String ratesText;
     private Runnable showRatesText;
+    private Runnable showJson;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -45,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 ratesText = e.getMessage();
             }
             finally {
-                runOnUiThread(showRatesText);
+                runOnUiThread(showJson);
             }
         };
 
@@ -53,6 +58,22 @@ public class MainActivity extends AppCompatActivity {
             ((TextView)findViewById(R.id.textView)).setText(ratesText);
         };
 
+        showJson=()->{
+
+            String txt = "";
+
+            try {
+                JSONArray rates = new JSONArray(ratesText);
+
+                for(int i=0;i<rates.length();++i){
+                    JSONObject rate = rates.getJSONObject(i);
+                    txt+=rate.getString("txt")+" "+rate.getDouble("rate")+"\n";
+                }
+                tv.setText(txt);
+            } catch (JSONException e) {
+                tv.setText(e.getMessage());
+            }
+        };
     }
 
     public void onClick(View view) {
