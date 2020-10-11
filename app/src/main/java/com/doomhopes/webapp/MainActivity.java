@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
                 int sym;
                 while((sym=resource.read())!=-1)
                     response +=(char)sym;
-                ratesText = new String(response.getBytes(StandardCharsets.ISO_8859_1,"UTF-8"));
+                ratesText = new String(response.getBytes( StandardCharsets.ISO_8859_1) ,"UTF-8");
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
