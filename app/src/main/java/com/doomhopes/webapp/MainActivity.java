@@ -37,19 +37,22 @@ public class MainActivity extends AppCompatActivity {
                 int sym;
                 while((sym=resource.read())!=-1)
                     response +=(char)sym;
-                ratesText = new String(response.getBytes(StandardCharsets.ISO_8859_1) ,"UTF-8");
+                ratesText = new String(response.getBytes(StandardCharsets.ISO_8859_1) , StandardCharsets.UTF_8);
 
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                ratesText = e.getMessage();
             } catch (IOException e) {
-                e.printStackTrace();
+                ratesText = e.getMessage();
             }
-            runOnUiThread(showRatesText);
+            finally {
+                runOnUiThread(showRatesText);
+            }
         };
 
         showRatesText=()-> {
             ((TextView)findViewById(R.id.textView)).setText(ratesText);
         };
+
     }
 
     public void onClick(View view) {
