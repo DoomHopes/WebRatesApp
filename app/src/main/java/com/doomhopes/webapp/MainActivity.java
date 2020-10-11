@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private String ratesText;
     private Runnable showRatesText;
     private Runnable showJson;
+    private Runnable showUSDJson;
+    private Runnable showEURJson;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -35,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
         TextView tv  = findViewById(R.id.textView);
         tv.setMovementMethod(new ScrollingMovementMethod());
+
+        TextView tvDollar = findViewById(R.id.textView2);
+        TextView tvEvro = findViewById(R.id.textView5);
+
 
         loadRates=()->{
             try(InputStream resource = new URL("https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json").openStream()){
@@ -50,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
                 ratesText = e.getMessage();
             }
             finally {
+                runOnUiThread(showUSDJson);
+                runOnUiThread(showEURJson);
                 runOnUiThread(showJson);
             }
         };
@@ -72,6 +80,44 @@ public class MainActivity extends AppCompatActivity {
                 tv.setText(txt.toString());
             } catch (JSONException e) {
                 tv.setText(e.getMessage());
+            }
+        };
+
+        showUSDJson=()->{
+
+            StringBuilder txt = new StringBuilder();
+
+            try {
+                JSONArray rates = new JSONArray(ratesText);
+
+                for(int i=0;i<rates.length();++i){
+                    JSONObject rate = rates.getJSONObject(i);
+                    if(rate.getString("cc").equals("USD")) {
+                        txt.append(rate.getDouble("rate"));
+                    }
+                }
+                tvDollar.setText(txt.toString());
+            } catch (JSONException e) {
+                tvDollar.setText(e.getMessage());
+            }
+        };
+
+        showEURJson=()->{
+
+            StringBuilder txt = new StringBuilder();
+
+            try {
+                JSONArray rates = new JSONArray(ratesText);
+
+                for(int i=0;i<rates.length();++i){
+                    JSONObject rate = rates.getJSONObject(i);
+                    if(rate.getString("cc").equals("EUR")) {
+                        txt.append(rate.getDouble("rate"));
+                    }
+                }
+                tvEvro.setText(txt.toString());
+            } catch (JSONException e) {
+                tvEvro.setText(e.getMessage());
             }
         };
     }
