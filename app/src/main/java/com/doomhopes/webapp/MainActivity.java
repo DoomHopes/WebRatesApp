@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            runOnUiThread(showRatesText);
         };
 
         showRatesText=()-> {
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-
+        (new Thread(loadRates)).start();
     }
 }
 
